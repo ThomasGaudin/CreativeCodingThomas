@@ -6,7 +6,7 @@ function setup() {
 
 function draw() {
   let scaleSin = map(sin(frameCount), -1, 1, 3,15)
-  background(0,0,0,10);
+  background(0,0,0,20);
   noFill()
   stroke(255)
   strokeWeight(0.3)
