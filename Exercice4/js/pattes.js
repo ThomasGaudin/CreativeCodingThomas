@@ -1,5 +1,5 @@
 class Pattes {
-    constructor(x, y, rotation, radius, ctx) {
+    constructor(x, y, rotation, radius, ctx, w,h) {
       this.x = x;
       this.y = y;
       this.rotation = rotation
@@ -7,17 +7,29 @@ class Pattes {
       this.targetRadius = radius;
       this.radius = radius;
       this.ctx = ctx;
-      this.speed = 0.01;
+      this.w = w;
+      this.h = h;
+      this.zoneTouch = 10 // in percent
+      this.speed = 0.02;
+      this.isScaleUp=false;
       this.t = 0;
     }
 
     checkiftouched(x, y) {
       return (
-        x > this.x - 50 &&
-        x < this.x + 50 &&
-        y > this.y &&
-        y < this.y + 50
+        x > this.x - this.w/this.zoneTouch &&
+        x < this.x + this.w/this.zoneTouch &&
+        y > this.y-this.h/this.zoneTouch &&
+        y < this.y + this.h/this.zoneTouch
       );
+    }
+
+
+    movingButNotouching(){
+      this.t = 0;
+      this.originRadius = this.radius;
+      this.isScaleUp = false;
+      this.targetRadius = 150;
     }
   
     draw() {
@@ -41,21 +53,19 @@ class Pattes {
     
     }
 
-    resetAndGo() {
+    resetAndGo(x,y) {
+      console.log("isTouched")
       this.t = 0;
       this.originRadius = this.radius;
-      if (this.radius == 150) {
-        this.targetRadius = 300;
-      } else {
-        this.targetRadius = 150;
-      }
+        this.isScaleUp = true
+        this.targetRadius = 260;
     }
   
     scale() {
       this.t += this.speed;
-      const ease = Easing.bounceOut(this.t);
+      const ease = Easing.elasticOut(this.t);
       this.radius = Math.abs(
-        this.originRadius + (this.targetRadius - this.originRadius) * ease
+        this.originRadius + (this.targetRadius - this.originRadius) * ease 
       );
     }
   
